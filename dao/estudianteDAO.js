@@ -16,6 +16,7 @@ export async function buscarPorEmail(email){
         nombre: datos.nombre, 
         email: datos.email, 
         password: datos.password, 
-        curso: datos.id_curso});
+        curso: datos.id_curso
+    });
     return estudiante;
 }

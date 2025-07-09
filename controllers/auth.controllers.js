@@ -15,7 +15,8 @@ export async function register(req, res){
         password: obj.password, 
         curso: obj.curso
     });
-    if(!estudianteDAO.buscarPorEmail(estudiante.email)){
+    const respuesta = await estudianteDAO.buscarPorEmail(estudiante.email);
+    if(respuesta){
         return res.status(400).json({error:"Ya existente"});
     }
     estudianteDAO.insertarEstudiante(estudiante);
