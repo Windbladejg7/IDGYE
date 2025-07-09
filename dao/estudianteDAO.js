@@ -7,6 +7,15 @@ export async function insertarEstudiante(estudiante){
 
 export async function buscarPorEmail(email){
     const result = await pool.query("SELECT * FROM ESTUDIANTE WHERE email=$1", [email]);
-    console.log(result.rows.length > 0)
-    return result.rows.length > 0;
+    const datos = result.rows[0];
+    if(!datos){
+        return null;
+    }
+    const estudiante = new Estudiante({
+        id_estudiante: datos.id_estudiante, 
+        nombre: datos.nombre, 
+        email: datos.email, 
+        password: datos.password, 
+        curso: datos.id_curso});
+    return estudiante;
 }

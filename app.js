@@ -15,6 +15,6 @@ app.use(cors({
 app.use(express.json());
 
 app.use("/api/judge", judge);
-app.use("/api/auth", auth);
+app.use("/api/auth", auth)
 
 app.listen(PORT, ()=>console.log(`Escuchando en puerto ${PORT}`));

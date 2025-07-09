@@ -1,19 +1,21 @@
 import bcrypt from "bcrypt";
 
 export class Estudiante{
-    constructor(nombre, email, password, curso){
+    constructor({id_estudiante, nombre, email, password, curso}){
+        this.id_estudiante = id_estudiante;
         this.nombre = nombre;
         this.email = email;
         this.password = password;
         this.curso = curso;
     }
 
-    static async crearEstudiante(nombre, email, password, curso){
+    static async crearEstudiante({id_estudiante = null, nombre, email, password, curso}){
         const hash = await bcrypt.hash(password, 10);
-        return new Estudiante(nombre, email, hash, curso);
+        return new Estudiante({id_estudiante, nombre, email, password: hash, curso});
     }
 
-    verficarPassword(password){
-        return bcrypt.compare(password, this.password);
+    async verificarPassword(password){
+        const resultado = await bcrypt.compare(password, this.password);
+        return resultado;
     }
 }
