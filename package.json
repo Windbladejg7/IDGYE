@@ -1,0 +1,19 @@
+{
+  "name": "idgye---backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev":"node --watch app.js",
+    "run":"node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^17.1.0",
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
+  }
+}
