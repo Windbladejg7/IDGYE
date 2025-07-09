@@ -15,12 +15,18 @@ CREATE TABLE DOCENTE(
     password TEXT NOT NULL
 );
 
+INSERT INTO DOCENTE(nombre, email, password)
+VALUES('Carla Abad', 'mimadre@gmail.com', 'mejorprofesoraever');
+
 CREATE TABLE CURSO(
     id_curso SERIAL PRIMARY KEY,
     nombre TEXT NOT NULL,
     id_docente INT,
     CONSTRAINT fk_docente FOREIGN KEY(id_docente) REFERENCES DOCENTE(id_docente)
 );
+
+INSERT INTO CURSO(nombre, id_docente)
+VALUES('4-12', 1);
 
 CREATE TABLE PRUEBA_CURSO(
     id_curso INT,
