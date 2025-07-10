@@ -11,7 +11,7 @@ export async function agregarEntrega(req, res){
 }
 
 export async function obtenerEntregasPorPrueba(req, res){
-    const {id_prueba, id_curso} = req.body;
+    const {id_prueba, id_curso} = req.params;
     const result = await pool.query("SELECT * FROM ENTREGA WHERE id_prueba=$1 AND id_curso=$2", [id_prueba, id_curso]);
     res.json(result.rows);
 }
