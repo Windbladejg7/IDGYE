@@ -58,6 +58,12 @@ CREATE TABLE ENTREGA(
     CONSTRAINT fk_estudiante FOREIGN KEY(id_estudiante) REFERENCES ESTUDIANTE(id_estudiante)
 );
 
+ALTER TABLE ENTREGA
+ADD COLUMN id_curso INT;
+
+ALTER TABLE ENTREGA
+ADD CONSTRAINT fk_prueba_curso FOREIGN KEY(id_curso, id_prueba) REFERENCES PRUEBA_CURSO(id_curso, id_prueba);
+
 CREATE VIEW prueba_completa AS 
 SELECT p.titulo, p.descripcion, p.fecha_creacion, p.fecha_max, p.inicia as hora_inicio, 
 p.hora_max, c.id_curso, c.nombre as curso, d.nombre as docente 
