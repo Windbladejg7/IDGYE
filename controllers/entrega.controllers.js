@@ -1,15 +1,17 @@
 import {pool} from "../db/db.js";
 
 export async function agregarEntrega(req, res){
-    const {arbol_archivos, id_prueba, id_estudiante} = req.body;
+    const {arbol_archivos, id_prueba, id_estudiante, id_curso} = req.body;
     try{
-        await pool.query("INSERT INTO ENTREGA(arbol_archivos, id_prueba, id_estudiante) VALUES($1, $2, $3)", [arbol_archivos, id_prueba, id_estudiante]);
+        await pool.query("INSERT INTO ENTREGA(arbol_archivos, id_prueba, id_estudiante, id_curso) VALUES($1, $2, $3, $4)", [arbol_archivos, id_prueba, id_estudiante, id_curso]);
         res.json({mensaje:"entrega agregada"});
     }catch(err){
         res.status(400).json({error:"Error al insertar la entrega"});
     }
 }
 
-export async function obtenerEntregasPorPrueba(){
-    const result = await pool.query("SELECT * FROM ");
+export async function obtenerEntregasPorPrueba(req, res){
+    const {id_prueba, id_curso} = req.body;
+    const result = await pool.query("SELECT * FROM ENTREGA WHERE id_prueba=$1 AND id_curso=$2", [id_prueba, id_curso]);
+    res.json(result.rows);
 }
