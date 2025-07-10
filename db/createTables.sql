@@ -57,3 +57,11 @@ CREATE TABLE ENTREGA(
     CONSTRAINT fk_prueba FOREIGN KEY(id_prueba) REFERENCES PRUEBA(id_prueba),
     CONSTRAINT fk_estudiante FOREIGN KEY(id_estudiante) REFERENCES ESTUDIANTE(id_estudiante)
 );
+
+CREATE VIEW prueba_completa AS 
+SELECT p.titulo, p.descripcion, p.fecha_creacion, p.fecha_max, p.inicia as hora_inicio, 
+p.hora_max, c.id_curso, c.nombre as curso, d.nombre as docente 
+FROM PRUEBA p 
+INNER JOIN PRUEBA_CURSO pc ON pc.id_prueba = p.id_prueba 
+INNER JOIN CURSO c ON pc.id_curso = c.id_curso 
+INNER JOIN DOCENTE d ON d.id_docente = c.id_docente;
