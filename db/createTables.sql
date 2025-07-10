@@ -65,7 +65,7 @@ ALTER TABLE ENTREGA
 ADD CONSTRAINT fk_prueba_curso FOREIGN KEY(id_curso, id_prueba) REFERENCES PRUEBA_CURSO(id_curso, id_prueba);
 
 CREATE VIEW prueba_completa AS 
-SELECT p.titulo, p.descripcion, p.fecha_creacion, p.fecha_max, p.inicia as hora_inicio, 
+SELECT p.id_prueba, p.titulo, p.descripcion, p.fecha_creacion, p.fecha_max, p.inicia as hora_inicio, 
 p.hora_max, c.id_curso, c.nombre as curso, d.nombre as docente 
 FROM PRUEBA p 
 INNER JOIN PRUEBA_CURSO pc ON pc.id_prueba = p.id_prueba 
