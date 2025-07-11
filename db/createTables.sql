@@ -59,6 +59,10 @@ CREATE TABLE ENTREGA(
 );
 
 ALTER TABLE ENTREGA
+ADD CONSTRAINT entrega_unica_por_estudiante
+UNIQUE (id_estudiante, id_prueba, id_curso);
+
+ALTER TABLE ENTREGA
 ADD COLUMN id_curso INT;
 
 ALTER TABLE ENTREGA
