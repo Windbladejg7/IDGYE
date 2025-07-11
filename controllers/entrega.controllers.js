@@ -15,3 +15,10 @@ export async function obtenerEntregasPorPrueba(req, res){
     const result = await pool.query("SELECT * FROM ENTREGA WHERE id_prueba=$1 AND id_curso=$2", [id_prueba, id_curso]);
     res.json(result.rows);
 }
+
+export async function miEntrega(req, res){
+    const {id_prueba} = req.params;
+    const usuario = req.usuario;
+    const result = await pool.query("SELECT * FROM ENTREGA WHERE id_prueba=$1 AND id_estudiante=$2", [id_prueba, usuario.id]);
+    res.json(result.rows[0]);
+}
