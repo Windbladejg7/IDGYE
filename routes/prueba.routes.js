@@ -6,6 +6,6 @@ const router = Router();
 
 router.post("/", accessControl.grant, accessControl.onlyAdmin, pruebaControllers.agregarPrueba);
 router.get("/:curso", accessControl.grant, pruebaControllers.obtenerPruebasXCurso);
-router.get("/estado/:id_estudiante", accessControl.grant, pruebaControllers.pruebasPendientes);
+router.get("/", accessControl.grant, pruebaControllers.pruebasPendientes);
 
 export default router;

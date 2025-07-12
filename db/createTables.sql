@@ -8,6 +8,8 @@ CREATE TABLE PRUEBA(
     hora_max TIME NOT NULL
 );
 
+INSERT INTO PRUEBA(titulo, descripcion, fecha_max, hora_max) VALUES('Prueba 3', 'AAAAAA', '12-07-2025', '17:00:00');
+
 CREATE TABLE DOCENTE(
     id_docente SERIAL PRIMARY KEY,
     nombre TEXT NOT NULL,
@@ -75,3 +77,36 @@ FROM PRUEBA p
 INNER JOIN PRUEBA_CURSO pc ON pc.id_prueba = p.id_prueba 
 INNER JOIN CURSO c ON pc.id_curso = c.id_curso 
 INNER JOIN DOCENTE d ON d.id_docente = c.id_docente;
+
+SELECT EXTRACT(HOURS FROM p.hora_max) ||':'|| EXTRACT(MINUTES FROM p.hora_max) AS hora FROM prueba_completa;
+
+SELECT p.id_prueba, p.titulo, TO_CHAR(p.hora_max, 'HH24:MI') as hora_max, TO_CHAR(p.fecha_max, 'Day') as dia, TO_CHAR(p.fecha_max, 'month') as mes, TO_CHAR(p.fecha_max, 'YYYY') as anio,
+CASE WHEN e.id_entrega IS NOT NULL THEN 'Entregada' ELSE 'Pendiente' END AS estado FROM PRUEBA p JOIN PRUEBA_CURSO pc ON pc.id_prueba = p.id_prueba JOIN ESTUDIANTE est ON est.id_estudiante = 7 LEFT JOIN ENTREGA e ON e.id_prueba = p.id_prueba AND e.id_curso = pc.id_curso AND e.id_estudiante = est.id_estudiante WHERE pc.id_curso = est.id_curso ORDER BY p.fecha_max;
+
+
+SELECT p.id_prueba, p.titulo, TO_CHAR(p.hora_max, 'HH24:MI') as hora_max, TO_CHAR(p.fecha_max, 'Day') as dia, TO_CHAR(fecha_max, 'TMmonth YYYY') as fecha,
+CASE WHEN e.id_entrega IS NOT NULL THEN 'Entregada' ELSE 'Pendiente' END AS estado FROM PRUEBA p JOIN PRUEBA_CURSO pc ON pc.id_prueba = p.id_prueba JOIN ESTUDIANTE est ON est.id_estudiante = 7 LEFT JOIN ENTREGA e ON e.id_prueba = p.id_prueba AND e.id_curso = pc.id_curso AND e.id_estudiante = est.id_estudiante WHERE pc.id_curso = est.id_curso ORDER BY p.fecha_max, p.hora_max;
+
+SELECT p.id_prueba, p.titulo, TO_CHAR(p.hora_max, 'HH24:MI') as hora_max, p.fecha_max,
+CASE WHEN e.id_entrega IS NOT NULL THEN 'Entregada' ELSE 'Pendiente' END AS estado FROM PRUEBA p JOIN PRUEBA_CURSO pc ON pc.id_prueba = p.id_prueba JOIN ESTUDIANTE est ON est.id_estudiante = 7 LEFT JOIN ENTREGA e ON e.id_prueba = p.id_prueba AND e.id_curso = pc.id_curso AND e.id_estudiante = est.id_estudiante WHERE pc.id_curso = est.id_curso ORDER BY p.fecha_max, p.hora_max;
+
+CREATE OR REPLACE VIEW prueba_con_estado AS
+SELECT 
+  est.id_estudiante,
+  est.id_curso,
+  p.id_prueba, 
+  p.titulo, 
+  TO_CHAR(p.hora_max, 'HH24:MI') AS hora_max, 
+  p.fecha_max as fecha,
+  CASE 
+    WHEN e.id_entrega IS NOT NULL THEN 'Entregada' 
+    ELSE 'Pendiente' 
+  END AS estado
+FROM PRUEBA p 
+JOIN PRUEBA_CURSO pc ON pc.id_prueba = p.id_prueba 
+JOIN ESTUDIANTE est ON pc.id_curso = est.id_curso
+LEFT JOIN ENTREGA e 
+  ON e.id_prueba = p.id_prueba 
+  AND e.id_curso = pc.id_curso 
+  AND e.id_estudiante = est.id_estudiante
+ORDER BY p.fecha_max, p.hora_max;

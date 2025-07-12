@@ -22,14 +22,19 @@ export async function agregarPrueba(req, res) {
 export async function obtenerPruebasXCurso(req, res) {
     const { curso } = req.params;
     const result = await pool.query("SELECT * FROM prueba_completa WHERE id_curso=$1", [curso]);
-    if (!result.rows.length > 0) {
-        res.json({ mensaje: "No hay pruebas para este curso" });
+    if (result.rows.length === 0) {
+        res.json(result.rows);
     }
-    res.json(result.rows);
+    res.json({ mensaje: "No hay pruebas para este curso" });
 }
 
 export async function pruebasPendientes(req, res) {
-    const {id_estudiante} = req.params;
-    const result = await pool.query("SELECT p.id_prueba, p.titulo, CASE WHEN e.id_entrega IS NOT NULL THEN 'Entregada' ELSE 'Pendiente' END AS estado FROM PRUEBA p JOIN PRUEBA_CURSO pc ON pc.id_prueba = p.id_prueba JOIN ESTUDIANTE est ON est.id_estudiante = $1 LEFT JOIN ENTREGA e ON e.id_prueba = p.id_prueba AND e.id_curso = pc.id_curso AND e.id_estudiante = est.id_estudiante WHERE pc.id_curso = est.id_curso", [id_estudiante]);
+    const {id} = req.usuario;
+    let query = "SELECT * FROM prueba_con_estado WHERE id_estudiante = $1";
+    const estado = req.query.estado;
+    if(estado){
+        query+=` AND estado='${estado}'`;
+    }
+    const result = await pool.query(query, [id]);
     res.json(result.rows);
 }
