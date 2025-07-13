@@ -9,6 +9,7 @@ router.get("/:curso", accessControl.grant, pruebaControllers.obtenerPruebasXCurs
 router.get("/", accessControl.grant, pruebaControllers.pruebasPendientes);
 
 //Agregar accessControl
+router.get("/codigo/:id_prueba", pruebaControllers.obtenerCasosDePrueba);
 router.get("/prueba/:id_prueba", pruebaControllers.obtenerInfoPrueba);
 
 export default router;

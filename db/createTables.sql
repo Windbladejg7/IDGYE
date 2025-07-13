@@ -112,3 +112,6 @@ LEFT JOIN ENTREGA e
 ORDER BY p.fecha_max, p.hora_max;
 
 SELECT FROM prueba_completa WHERE id_curso
+
+ALTER TABLE PRUEBA
+ADD COLUMN codigo_pruebas JSONB;
