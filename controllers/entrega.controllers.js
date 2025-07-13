@@ -1,11 +1,11 @@
 import { pool } from "../db/db.js";
 
 export async function agregarEntrega(req, res) {
-    const { arbol_archivos, id_prueba, id_curso } = req.body;
+    const { arbol_archivos, id_prueba, id_curso, calificacion } = req.body;
     const { id } = req.usuario;
     try {
-        await pool.query("INSERT INTO ENTREGA(arbol_archivos, id_prueba, id_estudiante, id_curso) VALUES($1, $2, $3, $4)", [arbol_archivos, id_prueba, id, id_curso]);
-        res.json({ mensaje: "entrega agregada" });
+        await pool.query("INSERT INTO ENTREGA(arbol_archivos, id_prueba, id_estudiante, id_curso, calificacion) VALUES($1, $2, $3, $4, $5)", [arbol_archivos, id_prueba, id, id_curso, calificacion]);
+        res.json({ mensaje: "Entrega agregada" });
     } catch (err) {
         res.status(400).json({ error: "Error al insertar la entrega" });
     }
@@ -28,7 +28,7 @@ export async function agregarCodigoDePrueba(req, res) {
     const { arbol_archivos, id_prueba, id_curso, codigo, language } = req.body;
     const response = await fetch(`http://localhost:3000/api/pruebas/codigo/${id_prueba}`, {
         headers: {
-            "Content-Type":"application/json"
+            "Content-Type": "application/json"
         }
     });
     const pruebas = await response.json();
@@ -39,24 +39,28 @@ export async function agregarCodigoDePrueba(req, res) {
         const submit = await fetch("http://localhost:3000/api/judge", {
             method: "POST",
             headers: {
-                "Content-Type":"application/json"
+                "Content-Type": "application/json"
             },
-            body: JSON.stringify({ code:load, language })
+            body: JSON.stringify({ code: load, language })
         });
 
         const resultado = await submit.json();
-
+        let entrega;
         if (!resultado.stderr) {
-            const mensaje = await fetch("http://localhost:3000/api/entregas", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": req.headers.authorization
-                },
-                body: JSON.stringify({ arbol_archivos, id_prueba, id_curso})
-            });
-            res.json(await mensaje.json());
+            entrega = {arbol_archivos, id_prueba, id_curso, calificacion:10};
+        }else{
+            entrega = {arbol_archivos, id_prueba, id_curso, calificacion:5};
         }
+
+        const mensaje = await fetch("http://localhost:3000/api/entregas", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": req.headers.authorization
+            },
+            body: JSON.stringify(entrega)
+        });
+        res.json(await mensaje.json());
     }
 
 }
