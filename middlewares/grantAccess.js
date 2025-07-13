@@ -22,6 +22,5 @@ export async function onlyAdmin(req, res, next){
     if(!permitido){
         return res.status(401).json({error: "Ruta administrativa"});
     }
-    res.json({mensaje: "Acceso concedido"});
     next();
 }

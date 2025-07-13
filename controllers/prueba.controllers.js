@@ -22,10 +22,7 @@ export async function agregarPrueba(req, res) {
 export async function obtenerPruebasXCurso(req, res) {
     const { curso } = req.params;
     const result = await pool.query("SELECT * FROM prueba_completa WHERE id_curso=$1", [curso]);
-    if (result.rows.length === 0) {
-        res.json(result.rows);
-    }
-    res.json({ mensaje: "No hay pruebas para este curso" });
+    res.json(result.rows);
 }
 
 export async function pruebasPendientes(req, res) {
