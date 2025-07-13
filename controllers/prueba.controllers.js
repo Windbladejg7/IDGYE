@@ -38,3 +38,9 @@ export async function pruebasPendientes(req, res) {
     const result = await pool.query(query, [id]);
     res.json(result.rows);
 }
+
+export async function obtenerInfoPrueba(req, res){
+    const {id_prueba} = req.params;
+    const result = await pool.query("SELECT * FROM prueba_completa WHERE id_prueba=$1", [id_prueba]);
+    res.json(result.rows[0]);
+}

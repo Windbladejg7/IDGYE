@@ -110,3 +110,5 @@ LEFT JOIN ENTREGA e
   AND e.id_curso = pc.id_curso 
   AND e.id_estudiante = est.id_estudiante
 ORDER BY p.fecha_max, p.hora_max;
+
+SELECT FROM prueba_completa WHERE id_curso

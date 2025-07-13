@@ -1,9 +1,10 @@
 import {pool} from "../db/db.js";
 
 export async function agregarEntrega(req, res){
-    const {arbol_archivos, id_prueba, id_estudiante, id_curso} = req.body;
+    const {arbol_archivos, id_prueba, id_curso} = req.body;
+    const {id} = req.usuario;
     try{
-        await pool.query("INSERT INTO ENTREGA(arbol_archivos, id_prueba, id_estudiante, id_curso) VALUES($1, $2, $3, $4)", [arbol_archivos, id_prueba, id_estudiante, id_curso]);
+        await pool.query("INSERT INTO ENTREGA(arbol_archivos, id_prueba, id_estudiante, id_curso) VALUES($1, $2, $3, $4)", [arbol_archivos, id_prueba, id, id_curso]);
         res.json({mensaje:"entrega agregada"});
     }catch(err){
         res.status(400).json({error:"Error al insertar la entrega"});
