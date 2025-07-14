@@ -90,7 +90,7 @@ CASE WHEN e.id_entrega IS NOT NULL THEN 'Entregada' ELSE 'Pendiente' END AS esta
 SELECT p.id_prueba, p.titulo, TO_CHAR(p.hora_max, 'HH24:MI') as hora_max, p.fecha_max,
 CASE WHEN e.id_entrega IS NOT NULL THEN 'Entregada' ELSE 'Pendiente' END AS estado FROM PRUEBA p JOIN PRUEBA_CURSO pc ON pc.id_prueba = p.id_prueba JOIN ESTUDIANTE est ON est.id_estudiante = 7 LEFT JOIN ENTREGA e ON e.id_prueba = p.id_prueba AND e.id_curso = pc.id_curso AND e.id_estudiante = est.id_estudiante WHERE pc.id_curso = est.id_curso ORDER BY p.fecha_max, p.hora_max;
 
-CREATE OR REPLACE VIEW prueba_con_estado AS
+CREATE VIEW prueba_con_estado AS
 SELECT 
   est.id_estudiante,
   est.id_curso,
@@ -100,7 +100,8 @@ SELECT
   p.fecha_max as fecha,
   CASE 
     WHEN e.id_entrega IS NOT NULL THEN 'Entregada' 
-    ELSE 'Pendiente' 
+    WHEN e.id_entrega IS NULL AND p.fecha_max >= CURRENT_DATE THEN 'Pendiente'
+    WHEN e.id_entrega IS NULL AND p.fecha_max < CURRENT_DATE THEN 'Atrasada'
   END AS estado
 FROM PRUEBA p 
 JOIN PRUEBA_CURSO pc ON pc.id_prueba = p.id_prueba 

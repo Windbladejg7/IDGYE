@@ -13,7 +13,7 @@ export async function agregarEntrega(req, res) {
 
 export async function obtenerEntregasPorPrueba(req, res) {
     const { id_prueba, id_curso } = req.params;
-    const result = await pool.query("SELECT * FROM ENTREGA WHERE id_prueba=$1 AND id_curso=$2", [id_prueba, id_curso]);
+    const result = await pool.query("SELECT e.id_entrega, e.fecha_entrega, e.hora_entrega, e.calificacion, e.id_prueba, e.id_curso, est.nombre FROM ENTREGA e INNER JOIN ESTUDIANTE est ON e.id_estudiante = est.id_estudiante WHERE id_prueba=$1 AND e.id_curso=$2", [id_prueba, id_curso]);
     res.json(result.rows);
 }
 
@@ -63,4 +63,11 @@ export async function agregarCodigoDePrueba(req, res) {
         res.json(await mensaje.json());
     }
 
+}
+
+
+export async function obtenerTotalEntregas(req, res){
+    const {id_prueba, id_curso} = req.params;
+    const result = await pool.query("SELECT COUNT(*) as total_entregas FROM ENTREGA WHERE id_prueba=$1 AND id_curso=$2", [id_prueba, id_curso]);
+    res.json(result.rows[0]);
 }

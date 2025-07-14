@@ -28,8 +28,12 @@ export async function obtenerPruebasXCurso(req, res) {
 
 export async function pruebasPendientes(req, res) {
     const {id} = req.usuario;
-    let query = "SELECT * FROM prueba_con_estado WHERE id_estudiante = $1";
+    let query = "SELECT * FROM prueba_con_estado WHERE id_estudiante = $1 ";
+    const atrasadas = req.query.atrasadas;
     const estado = req.query.estado;
+    if(atrasadas){
+        query+="AND fecha <= CURRENT_DATE";
+    }
     if(estado){
         query+=` AND estado='${estado}'`;
     }
