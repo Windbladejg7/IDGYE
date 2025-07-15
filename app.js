@@ -8,6 +8,7 @@ import entrega from "./routes/entregas.routes.js";
 import cursos from "./routes/cursos.routes.js";
 import totales from "./routes/totales.routes.js";
 import estudiantes from "./routes/estudiantes.routes.js";
+import docentes from "./routes/docentes.routes.js";
 import cors from "cors";
 
 dotenv.config();
@@ -28,5 +29,6 @@ app.use("/api/entregas", entrega);
 app.use("/api/cursos", cursos);
 app.use("/api/totales", totales);
 app.use("/api/estudiantes", estudiantes);
+app.use("/api/docentes", docentes);
 
 app.listen(PORT, ()=>console.log(`Escuchando en puerto ${PORT}`));
