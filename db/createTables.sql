@@ -5,10 +5,9 @@ CREATE TABLE PRUEBA(
     fecha_creacion DATE DEFAULT CURRENT_DATE,
     fecha_max DATE NOT NULL,
     inicia TIME DEFAULT LOCALTIME(0),
-    hora_max TIME NOT NULL
+    hora_max TIME NOT NULL,
+    codigo_pruebas JSONB
 );
-
-INSERT INTO PRUEBA(titulo, descripcion, fecha_max, hora_max) VALUES('Prueba 3', 'AAAAAA', '12-07-2025', '17:00:00');
 
 CREATE TABLE DOCENTE(
     id_docente SERIAL PRIMARY KEY,
@@ -18,7 +17,7 @@ CREATE TABLE DOCENTE(
 );
 
 INSERT INTO DOCENTE(nombre, email, password)
-VALUES('Carla Abad', 'mimadre@gmail.com', 'mejorprofesoraever');
+VALUES('Christina Jacome', 'modelamiento@gmail.com', '$2b$10$0BH73gOo.oDL8AKzYS7HSuwalsm2vZZwRISz9WFI0IhIauVMN5TO.');
 
 CREATE TABLE CURSO(
     id_curso SERIAL PRIMARY KEY,
@@ -53,22 +52,17 @@ CREATE TABLE ENTREGA(
     calificacion NUMERIC(4,2),
     fecha_entrega DATE DEFAULT CURRENT_DATE,
     hora_entrega TIME DEFAULT LOCALTIME(0),
-
+    id_curso
     id_prueba INT,
     id_estudiante INT,
     CONSTRAINT fk_prueba FOREIGN KEY(id_prueba) REFERENCES PRUEBA(id_prueba),
-    CONSTRAINT fk_estudiante FOREIGN KEY(id_estudiante) REFERENCES ESTUDIANTE(id_estudiante)
+    CONSTRAINT fk_estudiante FOREIGN KEY(id_estudiante) REFERENCES ESTUDIANTE(id_estudiante),
+    CONSTRAINT fk_prueba_curso FOREIGN KEY(id_curso, id_prueba) REFERENCES PRUEBA_CURSO(id_curso, id_prueba)
 );
 
 ALTER TABLE ENTREGA
 ADD CONSTRAINT entrega_unica_por_estudiante
 UNIQUE (id_estudiante, id_prueba, id_curso);
-
-ALTER TABLE ENTREGA
-ADD COLUMN id_curso INT;
-
-ALTER TABLE ENTREGA
-ADD CONSTRAINT fk_prueba_curso FOREIGN KEY(id_curso, id_prueba) REFERENCES PRUEBA_CURSO(id_curso, id_prueba);
 
 CREATE VIEW prueba_completa AS 
 SELECT p.id_prueba, p.titulo, p.descripcion, p.fecha_creacion, p.fecha_max, p.inicia as hora_inicio, 
@@ -77,18 +71,6 @@ FROM PRUEBA p
 INNER JOIN PRUEBA_CURSO pc ON pc.id_prueba = p.id_prueba 
 INNER JOIN CURSO c ON pc.id_curso = c.id_curso 
 INNER JOIN DOCENTE d ON d.id_docente = c.id_docente;
-
-SELECT EXTRACT(HOURS FROM p.hora_max) ||':'|| EXTRACT(MINUTES FROM p.hora_max) AS hora FROM prueba_completa;
-
-SELECT p.id_prueba, p.titulo, TO_CHAR(p.hora_max, 'HH24:MI') as hora_max, TO_CHAR(p.fecha_max, 'Day') as dia, TO_CHAR(p.fecha_max, 'month') as mes, TO_CHAR(p.fecha_max, 'YYYY') as anio,
-CASE WHEN e.id_entrega IS NOT NULL THEN 'Entregada' ELSE 'Pendiente' END AS estado FROM PRUEBA p JOIN PRUEBA_CURSO pc ON pc.id_prueba = p.id_prueba JOIN ESTUDIANTE est ON est.id_estudiante = 7 LEFT JOIN ENTREGA e ON e.id_prueba = p.id_prueba AND e.id_curso = pc.id_curso AND e.id_estudiante = est.id_estudiante WHERE pc.id_curso = est.id_curso ORDER BY p.fecha_max;
-
-
-SELECT p.id_prueba, p.titulo, TO_CHAR(p.hora_max, 'HH24:MI') as hora_max, TO_CHAR(p.fecha_max, 'Day') as dia, TO_CHAR(fecha_max, 'TMmonth YYYY') as fecha,
-CASE WHEN e.id_entrega IS NOT NULL THEN 'Entregada' ELSE 'Pendiente' END AS estado FROM PRUEBA p JOIN PRUEBA_CURSO pc ON pc.id_prueba = p.id_prueba JOIN ESTUDIANTE est ON est.id_estudiante = 7 LEFT JOIN ENTREGA e ON e.id_prueba = p.id_prueba AND e.id_curso = pc.id_curso AND e.id_estudiante = est.id_estudiante WHERE pc.id_curso = est.id_curso ORDER BY p.fecha_max, p.hora_max;
-
-SELECT p.id_prueba, p.titulo, TO_CHAR(p.hora_max, 'HH24:MI') as hora_max, p.fecha_max,
-CASE WHEN e.id_entrega IS NOT NULL THEN 'Entregada' ELSE 'Pendiente' END AS estado FROM PRUEBA p JOIN PRUEBA_CURSO pc ON pc.id_prueba = p.id_prueba JOIN ESTUDIANTE est ON est.id_estudiante = 7 LEFT JOIN ENTREGA e ON e.id_prueba = p.id_prueba AND e.id_curso = pc.id_curso AND e.id_estudiante = est.id_estudiante WHERE pc.id_curso = est.id_curso ORDER BY p.fecha_max, p.hora_max;
 
 CREATE VIEW prueba_con_estado AS
 SELECT 
@@ -111,8 +93,3 @@ LEFT JOIN ENTREGA e
   AND e.id_curso = pc.id_curso 
   AND e.id_estudiante = est.id_estudiante
 ORDER BY p.fecha_max, p.hora_max;
-
-SELECT FROM prueba_completa WHERE id_curso
-
-ALTER TABLE PRUEBA
-ADD COLUMN codigo_pruebas JSONB;
