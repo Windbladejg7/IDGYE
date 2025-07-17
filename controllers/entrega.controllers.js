@@ -26,7 +26,7 @@ export async function miEntrega(req, res) {
 
 export async function agregarCodigoDePrueba(req, res) {
     const { arbol_archivos, id_prueba, id_curso, codigo, language } = req.body;
-    const response = await fetch(`http://localhost:3000/api/pruebas/codigo/${id_prueba}`, {
+    const response = await fetch(`https://idgye.onrender.com/api/pruebas/codigo/${id_prueba}`, {
         headers: {
             "Content-Type": "application/json"
         }
@@ -36,7 +36,7 @@ export async function agregarCodigoDePrueba(req, res) {
     if (response.ok) {
         const load = codigo.content + "\n" + pruebas.pruebas;
         console.log(load);
-        const submit = await fetch("http://localhost:3000/api/judge", {
+        const submit = await fetch("https://idgye.onrender.com/api/judge", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -52,7 +52,7 @@ export async function agregarCodigoDePrueba(req, res) {
             entrega = {arbol_archivos, id_prueba, id_curso, calificacion:5};
         }
 
-        const mensaje = await fetch("http://localhost:3000/api/entregas", {
+        const mensaje = await fetch("https://idgye.onrender.com/api/entregas", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
