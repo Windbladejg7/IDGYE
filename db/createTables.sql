@@ -52,7 +52,7 @@ CREATE TABLE ENTREGA(
     calificacion NUMERIC(4,2),
     fecha_entrega DATE DEFAULT CURRENT_DATE,
     hora_entrega TIME DEFAULT LOCALTIME(0),
-    id_curso
+    id_curso INT,
     id_prueba INT,
     id_estudiante INT,
     CONSTRAINT fk_prueba FOREIGN KEY(id_prueba) REFERENCES PRUEBA(id_prueba),
